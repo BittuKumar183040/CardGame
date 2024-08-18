@@ -1,28 +1,35 @@
-let boxs=document.querySelectorAll("td")
+let boxs=document.querySelectorAll("th")
 let completionCordList=[];
 let lastSelection;
+let selectedListMaxTwo=[]; 
+
+
+const setEffect=([...items], color, fontSize)=>{
+    items.forEach((element, idx)=>{
+        element.style.backgroundColor=color
+        element.style.fontSize=fontSize
+    })
+}
+
+const checkValid=()=>{
+    console.log(selectedListMaxTwo)
+    if(selectedListMaxTwo[0].innerText === selectedListMaxTwo[1].innerText && selectedListMaxTwo[0].id !== selectedListMaxTwo[1].id){
+        setEffect(selectedListMaxTwo, "gray", "50px")
+    }
+    selectedListMaxTwo=[];
+}
+
 boxs.forEach((item,idx)=>{
     item.addEventListener('click',()=>{
-        let currentSelection=item
-        if(!lastSelection){
-            lastSelection=item
-        }
-        item.style.backgroundColor="orange"
+        selectedListMaxTwo.push(item)
 
-        // initial section when no item is matched
-        if(lastSelection.innerText === currentSelection.innerText && lastSelection.id !== currentSelection.id){
-            console.log("Matched", lastSelection)
-            completionCordList.push(currentSelection)
-            lastSelection.style.backgroundColor="gray"
-            currentSelection.style.backgroundColor="gray"
-        }
-
-        console.log(lastSelection,currentSelection)
-        
-        
-        
-        if(lastSelection){
-            lastSelection=item;
-        }
+        setEffect([item], "pink", "50px")
+        setTimeout(()=>{
+            if(selectedListMaxTwo.length===2){
+                // reset the initial pink background to transparent.
+                setEffect(selectedListMaxTwo, "transparent", "0px")
+                checkValid()
+            }
+        }, 500)
     })
 })
